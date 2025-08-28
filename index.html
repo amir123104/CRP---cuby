@@ -1,759 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matrix Animation Editor</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuby Landing Page</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    /* Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: linear-gradient(135deg, #000000 0%, #222222 100%);
-      color: #f0f0f0;
-      min-height: 100vh;
-      padding: 20px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Montserrat', sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        text-align: center;
     }
-    
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    
+
     .title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      background: linear-gradient(90deg, #cccccc 0%, #ffffff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
+        font-size: 3.5rem;
+        letter-spacing: -1px;
     }
-    
-    .subtitle {
-      color: #aaaaaa;
-      font-size: 1.1rem;
-      margin-bottom: 30px;
+
+    .title .bold {
+        font-weight: 700;
     }
-    
-    .card {
-      background-color: #333333;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      margin-bottom: 25px;
+
+    .title .regular {
+        font-weight: 400;
+        opacity: 0.7;
     }
-    
-    .card-title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #dddddd;
-      display: flex;
-      align-items: center;
+
+    .buttons {
+        margin-top: 2.5rem;
+        display: flex;
+        gap: 1.5rem;
     }
-    
-    .card-title i {
-      margin-right: 10px;
-    }
-    
-    .matrix-grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 6px;
-      margin: 0 auto;
-      width: 320px;
-    }
-    
-    .matrix-cell {
-      width: 35px;
-      height: 35px;
-      background-color: #555555;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .matrix-cell:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
-    }
-    
-    .matrix-cell.active {
-      background-color: #ffffff;
-      box-shadow: 0 0 12px rgba(233, 233, 233, 0.8);
-    }
-    
+
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 20px;
-      background: linear-gradient(90deg, #777777 0%, #aaaaaa 100%);
-      color: black;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
+        padding: 0.9rem 2.2rem;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        border: 2px solid #000000;
+        border-radius: 50px;
+        transition: all 0.3s ease;
     }
-    
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.4);
+
+    .buy-now {
+        background-color: #000000;
+        color: #ffffff;
     }
-    
-    .btn i {
-      margin-right: 8px;
+
+    .buy-now:hover {
+        background-color: #ffffff;
+        color: #000000;
     }
-    
-    .btn-secondary {
-      background: #666666;
-      color: white;
+
+    .customize {
+        background-color: #ffffff;
+        color: #000000;
     }
-    
-    .btn-secondary:hover {
-      background: #888888;
+
+    .customize:hover {
+        background-color: #000000;
+        color: #ffffff;
     }
-    
-    .btn-danger {
-      background: #888888;
-      color: white;
-    }
-    
-    .btn-danger:hover {
-      background: #aaaaaa;
-      color: black;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-    
-    .animation-timeline {
-      display: flex;
-      overflow-x: auto;
-      padding: 15px 0;
-      margin: 25px 0;
-      gap: 15px;
-    }
-    
-    .animation-frame-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    
-    .animation-frame {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 2px;
-      width: 100px;
-      height: 100px;
-      background-color: #555555;
-      padding: 8px;
-      border-radius: 8px;
-      margin-bottom: 8px;
-    }
-    
-    .animation-frame-cell {
-      width: 10px;
-      height: 10px;
-      background-color: #777777;
-      border-radius: 2px;
-    }
-    
-    .animation-frame-cell.active {
-      background-color: #ffffff;
-    }
-    
-    .current-frame {
-      border: 3px solid #dddddd;
-    }
-    
-    .frame-duration {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 15px 0;
-    }
-    
-    .frame-duration input {
-      background: #555555;
-      border: 2px solid #dddddd;
-      border-radius: 6px;
-      padding: 8px;
-      color: white;
-      width: 100px;
-    }
-    
-    .connection-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 15px;
-      background-color: #555555;
-      border-radius: 30px;
-      margin-bottom: 20px;
-    }
-    
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    
-    .status-connected {
-      background-color: #8fff95;
-      box-shadow: 0 0 8px rgba(179, 255, 149, 0.6);
-    }
-    
-    .status-disconnected {
-      background-color: #888888;
-    }
-    
-    .status-connecting {
-      background-color: #cccccc;
-    }
-    
-    .debug-console {
-      background-color: #111111;
-      color: #f0f0f0;
-      font-family: monospace;
-      padding: 15px;
-      border-radius: 8px;
-      max-height: 200px;
-      overflow-y: auto;
-      margin-top: 20px;
-    }
-    
-    .debug-entry {
-      margin-bottom: 8px;
-      font-size: 0.9rem;
-    }
-    
-    .debug-error {
-      color: #ff8888;
-    }
-    
-    .debug-success {
-      color: #ffffff;
-    }
-    
-    .debug-info {
-      color: #cccccc;
-    }
-  </style>
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1 class="title">Matrix Animation Editor</h1>
-      <p class="subtitle">Create and upload animations to your LED matrix display</p>
-    </div>
-    
-    <div class="card">
-      <h2 class="card-title"><i class="fas fa-microchip"></i> Device Connection</h2>
-      
-      <div class="connection-status">
-        <span class="status-dot status-disconnected" id="status-dot"></span>
-        <span id="status-text">Disconnected</span>
-      </div>
-      
-      <div class="controls">
-        <button id="connect-btn" class="btn">
-          <i class="fas fa-plug"></i>Connect
-        </button>
-        <button id="disconnect-btn" class="btn btn-secondary" style="display: none;">
-          <i class="fas fa-unplug"></i>Disconnect
-        </button>
-      </div>
-    </div>
-    
-    <div class="card">
-      <h2 class="card-title"><i class="fas fa-edit"></i> Animation Editor</h2>
-      
-      <div class="matrix-grid" id="animation-canvas">
-        <!-- 8x8 grid for animation frame editing -->
-      </div>
-      
-      <div class="frame-duration">
-        <label>Frame Duration (ms):</label>
-        <input type="number" id="frame-duration" min="100" max="5000" value="500">
-      </div>
-      
-      <div class="controls">
-        <button id="add-frame-btn" class="btn">
-          <i class="fas fa-plus"></i>Add Frame
-        </button>
-        <button id="remove-frame-btn" class="btn btn-secondary">
-          <i class="fas fa-minus"></i>Remove Frame
-        </button>
-        <button id="copy-frame-btn" class="btn btn-secondary">
-          <i class="fas fa-copy"></i>Copy Frame
-        </button>
-        <button id="clear-frame-btn" class="btn btn-secondary">
-          <i class="fas fa-broom"></i>Clear Frame
-        </button>
-        <button id="clear-animation-btn" class="btn btn-danger">
-          <i class="fas fa-trash"></i>Clear All
-        </button>
-      </div>
-      
-      <h3 class="card-title"><i class="fas fa-film"></i> Animation Timeline</h3>
-      
-      <div class="animation-timeline" id="animation-timeline">
-        <!-- Animation frames will be added here -->
-      </div>
-      
-      <div class="controls">
-        <button id="play-animation-btn" class="btn">
-          <i class="fas fa-play"></i>Preview
-        </button>
-        <button id="stop-animation-btn" class="btn btn-secondary">
-          <i class="fas fa-stop"></i>Stop
-        </button>
-        <button id="upload-animation-btn" class="btn">
-          <i class="fas fa-upload"></i>Upload to Matrix
-        </button>
-      </div>
-    </div>
-    
-    <div class="card">
-      <h2 class="card-title"><i class="fas fa-terminal"></i> Debug Console</h2>
-      
-      <div class="debug-console" id="debug-console">
-        <div class="debug-entry debug-info">System initialized. Connect your device to begin.</div>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    // Global variables
-    let port = null;
-    let reader = null;
-    let writer = null;
-    let isConnected = false;
-    let animationFrames = [];
-    let currentFrameIndex = 0;
-    let animationInterval = null;
-    let isPlaying = false;
-    
-    // Initialize the application
-    function initApp() {
-      initMatrixGrid();
-      updateConnectionStatus(false);
-      addDebugMessage("Application initialized successfully", "info");
-      
-      // Event listeners
-      document.getElementById('connect-btn').addEventListener('click', connectToDevice);
-      document.getElementById('disconnect-btn').addEventListener('click', disconnectFromDevice);
-      document.getElementById('upload-animation-btn').addEventListener('click', uploadAnimationToDevice);
-      
-      // Animation control buttons
-      document.getElementById('add-frame-btn').addEventListener('click', addAnimationFrame);
-      document.getElementById('remove-frame-btn').addEventListener('click', removeAnimationFrame);
-      document.getElementById('copy-frame-btn').addEventListener('click', copyAnimationFrame);
-      document.getElementById('clear-frame-btn').addEventListener('click', clearCurrentFrame);
-      document.getElementById('clear-animation-btn').addEventListener('click', clearAnimation);
-      document.getElementById('play-animation-btn').addEventListener('click', playAnimation);
-      document.getElementById('stop-animation-btn').addEventListener('click', stopAnimation);
-      document.getElementById('frame-duration').addEventListener('change', updateFrameDuration);
-      
-      // Add first animation frame by default
-      addAnimationFrame();
-    }
-    
-    // Initialize the 8x8 matrix grid
-    function initMatrixGrid() {
-      const animationCanvas = document.getElementById('animation-canvas');
-      animationCanvas.innerHTML = '';
-      
-      // Create 8x8 grid for animation canvas
-      for (let i = 0; i < 64; i++) {
-        const canvasCell = document.createElement('div');
-        canvasCell.classList.add('matrix-cell');
-        canvasCell.dataset.index = i;
-        canvasCell.addEventListener('click', () => toggleAnimationCell(i));
-        animationCanvas.appendChild(canvasCell);
-      }
-    }
-    
-    // Add message to debug console
-    function addDebugMessage(message, type = "info") {
-      const console = document.getElementById('debug-console');
-      const entry = document.createElement('div');
-      entry.className = `debug-entry debug-${type}`;
-      entry.textContent = `> ${new Date().toLocaleTimeString()}: ${message}`;
-      console.appendChild(entry);
-      console.scrollTop = console.scrollHeight;
-    }
-    
-    // Toggle cell in animation canvas
-    function toggleAnimationCell(index) {
-      if (animationFrames.length === 0) return;
-      
-      const currentFrame = animationFrames[currentFrameIndex];
-      currentFrame.bitmap[index] = !currentFrame.bitmap[index];
-      
-      // Update canvas display
-      const cell = document.querySelector(`#animation-canvas .matrix-cell[data-index="${index}"]`);
-      if (currentFrame.bitmap[index]) {
-        cell.classList.add('active');
-      } else {
-        cell.classList.remove('active');
-      }
-      
-      // Update the frame preview
-      updateFramePreview(currentFrameIndex);
-      addDebugMessage(`Toggled pixel at index ${index} in frame ${currentFrameIndex + 1}`, "info");
-    }
-    
-    // Add a new animation frame
-    function addAnimationFrame() {
-      // If we're copying the current frame, use its bitmap
-      const bitmap = animationFrames.length > 0 && animationFrames[currentFrameIndex] ? 
-        [...animationFrames[currentFrameIndex].bitmap] : 
-        Array(64).fill(false);
-      
-      const frame = {
-        bitmap: bitmap,
-        duration: parseInt(document.getElementById('frame-duration').value) || 500
-      };
-      
-      animationFrames.push(frame);
-      currentFrameIndex = animationFrames.length - 1;
-      updateAnimationTimeline();
-      updateCanvas();
-      addDebugMessage(`Added new animation frame (total: ${animationFrames.length})`, "info");
-    }
-    
-    // Remove current animation frame
-    function removeAnimationFrame() {
-      if (animationFrames.length <= 1) {
-        addDebugMessage("Cannot remove the only frame", "error");
-        return; // Keep at least one frame
-      }
-      
-      animationFrames.splice(currentFrameIndex, 1);
-      
-      // Adjust current frame index if needed
-      if (currentFrameIndex >= animationFrames.length) {
-        currentFrameIndex = animationFrames.length - 1;
-      }
-      
-      updateAnimationTimeline();
-      updateCanvas();
-      addDebugMessage(`Removed animation frame (remaining: ${animationFrames.length})`, "info");
-    }
-    
-    // Copy current animation frame
-    function copyAnimationFrame() {
-      if (animationFrames.length === 0) return;
-      
-      const frame = {
-        bitmap: [...animationFrames[currentFrameIndex].bitmap],
-        duration: animationFrames[currentFrameIndex].duration
-      };
-      
-      animationFrames.splice(currentFrameIndex + 1, 0, frame);
-      currentFrameIndex++;
-      updateAnimationTimeline();
-      updateCanvas();
-      addDebugMessage(`Copied animation frame ${currentFrameIndex}`, "info");
-    }
-    
-    // Clear the current frame
-    function clearCurrentFrame() {
-      if (animationFrames.length === 0) return;
-      
-      animationFrames[currentFrameIndex].bitmap = Array(64).fill(false);
-      updateCanvas();
-      updateFramePreview(currentFrameIndex);
-      addDebugMessage(`Cleared frame ${currentFrameIndex + 1}`, "info");
-    }
-    
-    // Clear all animation frames
-    function clearAnimation() {
-      animationFrames = [];
-      currentFrameIndex = 0;
-      updateAnimationTimeline();
-      addAnimationFrame(); // Add a new empty frame
-      addDebugMessage("Cleared all animation frames", "info");
-    }
-    
-    // Update the animation timeline display
-    function updateAnimationTimeline() {
-      const timeline = document.getElementById('animation-timeline');
-      timeline.innerHTML = '';
-      
-      animationFrames.forEach((frame, index) => {
-        const frameContainer = document.createElement('div');
-        frameContainer.className = `animation-frame-container ${index === currentFrameIndex ? 'current-frame' : ''}`;
-        frameContainer.dataset.index = index;
-        frameContainer.addEventListener('click', () => selectFrame(index));
-        
-        const framePreview = document.createElement('div');
-        framePreview.className = 'animation-frame';
-        
-        // Create cells for this frame preview
-        for (let i = 0; i < 64; i++) {
-          const cell = document.createElement('div');
-          cell.className = `animation-frame-cell ${frame.bitmap[i] ? 'active' : ''}`;
-          framePreview.appendChild(cell);
-        }
-        
-        const frameLabel = document.createElement('div');
-        frameLabel.className = 'text-xs mt-1';
-        frameLabel.textContent = `Frame ${index + 1} (${frame.duration}ms)`;
-        frameLabel.style.color = '#f0f0f0';
-        
-        frameContainer.appendChild(framePreview);
-        frameContainer.appendChild(frameLabel);
-        timeline.appendChild(frameContainer);
-      });
-    }
-    
-    // Update the frame preview display
-    function updateFramePreview(frameIndex) {
-      if (frameIndex < 0 || frameIndex >= animationFrames.length) return;
-      
-      const frame = animationFrames[frameIndex];
-      const frameContainers = document.querySelectorAll('.animation-frame-container');
-      
-      if (frameIndex < frameContainers.length) {
-        const cells = frameContainers[frameIndex].querySelectorAll('.animation-frame-cell');
-        cells.forEach((cell, index) => {
-          if (frame.bitmap[index]) {
-            cell.classList.add('active');
-          } else {
-            cell.classList.remove('active');
-          }
-        });
-      }
-    }
-    
-    // Select a frame to edit
-    function selectFrame(index) {
-      if (index < 0 || index >= animationFrames.length) return;
-      
-      currentFrameIndex = index;
-      updateCanvas();
-      updateAnimationTimeline();
-      addDebugMessage(`Selected frame ${currentFrameIndex + 1} for editing`, "info");
-    }
-    
-    // Update the animation canvas with the current frame
-    function updateCanvas() {
-      if (animationFrames.length === 0) return;
-      
-      const currentFrame = animationFrames[currentFrameIndex];
-      const cells = document.querySelectorAll('#animation-canvas .matrix-cell');
-      
-      cells.forEach((cell, index) => {
-        if (currentFrame.bitmap[index]) {
-          cell.classList.add('active');
-        } else {
-          cell.classList.remove('active');
-        }
-      });
-      
-      // Update frame duration input
-      document.getElementById('frame-duration').value = currentFrame.duration;
-    }
-    
-    // Play the animation preview
-    function playAnimation() {
-      if (isPlaying || animationFrames.length === 0) return;
-      
-      isPlaying = true;
-      let frameIndex = 0;
-      
-      // Show first frame immediately
-      showAnimationFrame(frameIndex);
-      
-      // Set up the animation loop
-      animationInterval = setInterval(() => {
-        frameIndex = (frameIndex + 1) % animationFrames.length;
-        showAnimationFrame(frameIndex);
-      }, animationFrames[frameIndex].duration);
-      
-      addDebugMessage("Started animation preview", "info");
-    }
-    
-    // Show a specific animation frame in preview
-    function showAnimationFrame(frameIndex) {
-      if (frameIndex < 0 || frameIndex >= animationFrames.length) return;
-      
-      // Update the current frame indicator
-      currentFrameIndex = frameIndex;
-      updateAnimationTimeline();
-    }
-    
-    // Stop the animation preview
-    function stopAnimation() {
-      isPlaying = false;
-      if (animationInterval) {
-        clearInterval(animationInterval);
-        animationInterval = null;
-      }
-      
-      addDebugMessage("Stopped animation preview", "info");
-    }
-    
-    // Update frame duration for current frame
-    function updateFrameDuration() {
-      if (animationFrames.length === 0) return;
-      
-      const duration = parseInt(document.getElementById('frame-duration').value) || 500;
-      animationFrames[currentFrameIndex].duration = duration;
-      updateAnimationTimeline();
-      addDebugMessage(`Updated frame duration to ${duration}ms`, "info");
-    }
-    
-    // Update connection status
-    function updateConnectionStatus(connected) {
-      const statusDot = document.getElementById('status-dot');
-      const statusText = document.getElementById('status-text');
-      const connectBtn = document.getElementById('connect-btn');
-      const disconnectBtn = document.getElementById('disconnect-btn');
-      
-      isConnected = connected;
-      
-      if (connected) {
-        statusDot.className = 'status-dot status-connected';
-        statusText.textContent = 'Connected';
-        connectBtn.style.display = 'none';
-        disconnectBtn.style.display = 'inline-flex';
-        addDebugMessage("Device connected successfully", "success");
-      } else {
-        statusDot.className = 'status-dot status-disconnected';
-        statusText.textContent = 'Disconnected';
-        connectBtn.style.display = 'inline-flex';
-        disconnectBtn.style.display = 'none';
-        addDebugMessage("Device disconnected", "info");
-      }
-    }
-    
-    // Connect to device via Web Serial API
-    async function connectToDevice() {
-      if (!('serial' in navigator)) {
-        addDebugMessage("Web Serial API not supported in your browser", "error");
-        alert('Web Serial API not supported in your browser. Please use Chrome or Edge.');
-        return;
-      }
-      
-      try {
-        addDebugMessage("Requesting serial port access...", "info");
-        // Request port and open connection
-        port = await navigator.serial.requestPort();
-        addDebugMessage("Port selected, opening connection...", "info");
-        
-        await port.open({ baudRate: 115200 });
-        addDebugMessage("Connection opened at 115200 baud", "success");
-        
-        // Set up writer
-        writer = port.writable.getWriter();
-        
-        // Set up reader
-        reader = port.readable.getReader();
-        
-        // Update UI
-        updateConnectionStatus(true);
-      } catch (error) {
-        addDebugMessage(`Connection error: ${error.message}`, "error");
-        console.error('Connection error:', error);
-        updateConnectionStatus(false);
-      }
-    }
-    
-    // Disconnect from device
-    async function disconnectFromDevice() {
-      try {
-        if (reader) {
-          await reader.cancel();
-          reader = null;
-        }
-        if (writer) {
-          await writer.close();
-          writer = null;
-        }
-        if (port) {
-          await port.close();
-          port = null;
-        }
-        
-        addDebugMessage("Disconnected from device", "info");
-      } catch (error) {
-        addDebugMessage(`Disconnect error: ${error.message}`, "error");
-        console.error('Disconnect error:', error);
-      }
-      
-      updateConnectionStatus(false);
-    }
-    
-    // Upload animation to device
-    async function uploadAnimationToDevice() {
-      if (!isConnected) {
-        addDebugMessage("Please connect a device first", "error");
-        alert('Please connect a device first');
-        return;
-      }
-      
-      if (animationFrames.length === 0) {
-        addDebugMessage("Please create at least one animation frame", "error");
-        alert('Please create at least one animation frame');
-        return;
-      }
-      
-      try {
-        // Create animation command
-        let command = 'ANIMATION:';
-        
-        // Add each frame to the command
-        const frameCommands = animationFrames.map(frame => {
-          const binaryString = frame.bitmap.map(active => active ? '1' : '0').join('');
-          return `${binaryString},${frame.duration}`;
-        });
-        
-        command += frameCommands.join('|');
-        
-        const encoder = new TextEncoder();
-        await writer.write(encoder.encode(command + '\n'));
-        
-        addDebugMessage(`Sent animation command: ${command}`, "success");
-        console.log("Sent animation command:", command);
-        
-        // Show success feedback
-        const btn = document.getElementById('upload-animation-btn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-        btn.style.background = '#ffffff';
-        btn.style.color = '#000000';
-        
-        setTimeout(() => {
-          btn.innerHTML = originalText;
-          btn.style.background = '';
-          btn.style.color = '';
-        }, 2000);
-      } catch (error) {
-        addDebugMessage(`Upload error: ${error.message}`, "error");
-        console.error('Animation upload error:', error);
-        alert('Failed to send animation to device');
-      }
-    }
-    
-    // Initialize the application when the page loads
-    document.addEventListener('DOMContentLoaded', initApp);
-  </script>
+    <div class="title">
+        <span class="bold">cuby</span> 
+        <span class="regular">matrix</span> 
+        <span class="bold">mini</span>
+    </div>
+
+    <div class="buttons">
+        <a href="https://scxtax-ra.myshopify.com/products/cuby-matrix-mini" class="btn buy-now">Buy Now</a>
+        <a href="https://amir123104.github.io/cuby/" class="btn customize">Customize Site</a>
+    </div>
+
 </body>
 </html>
